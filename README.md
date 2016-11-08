@@ -2,3 +2,5 @@
 Super Space Deluxe
 
 A simple game
+
+Jericho
