@@ -1,13 +1,15 @@
 #!/usr/bin/python
 
 import pygame, time
-from entities import BaseEntity
+from entities import BaseEntity, SpaceJunk
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
     exit = False
     lastTime = time.time()
+
+    ActiveSpriteGroup = pygame.sprite.Group()
 
     Player = BaseEntity.BaseEntity()
     Player.setImage("triangle.png")
@@ -16,18 +18,24 @@ def main():
     Player.alpha = 15
     Player.theta = -45
 
+    ActiveSpriteGroup.add(Player)
+
+    for i in range(10):
+        ActiveSpriteGroup.add(SpaceJunk.SpaceJunk())
+
     while not exit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit = True
             else:
-                # In the future this will be replaced by an Active SpriteGroup
-                Player.update(event)
+                ActiveSpriteGroup.update(event)
 
-        Player.tick(time.time() - lastTime)
-        lastTime = time.time()
         screen.fill([255, 255, 255])
-        Player.render(screen)
+
+        for sprite in ActiveSpriteGroup:
+            sprite.tick(time.time() - lastTime)
+            sprite.render(screen)
+        lastTime = time.time()
         pygame.display.update()
 
 
